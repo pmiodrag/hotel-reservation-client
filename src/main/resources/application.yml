@@ -1,0 +1,21 @@
+info:
+  name: hotel-reservation-client
+  description: Hotel resrvation client use case application
+   
+server:
+  port: ${PORT:9090}
+spring:
+    profiles:
+        active: dev
+    rabbitmq:
+        username: guest
+        password: guest
+        host: localhost
+        port: 5672
+        
+hotelserver:
+  url: http://localhost:9080/api
+  amqp:
+    exchange: twinsoft.hotelserver.exchange  
+    queue: twinsoft.hotelserver.hotel.queue
+    routing-key: twinsoft.hotelserver.hotel.key  
