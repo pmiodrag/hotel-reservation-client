@@ -58,8 +58,8 @@ public class HotelReservationController {
 	 * @return ResponseEntity<Page<Hotel>>
 	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<HotelReservation>> findAll() {
-		return new ResponseEntity<>(hotelReservationService.findAll(), HttpStatus.OK);
+	public ResponseEntity<HotelReservation[]> findAll(@RequestHeader(value="Authorization") String token) {
+		return hotelReservationService.findAll(token);
 	}
 	
 	/**

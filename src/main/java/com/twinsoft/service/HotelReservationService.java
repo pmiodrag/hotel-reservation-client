@@ -2,6 +2,8 @@ package com.twinsoft.service;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
 import com.twinsoft.dto.HotelReservation;
 
 
@@ -22,7 +24,7 @@ public interface HotelReservationService {
 	 * Retrieves the list of all hotel reservations.
 	 * @return list of hotel reservations
 	 */
-	List<HotelReservation> findAll();
+	 ResponseEntity<HotelReservation[]>  findAll(String token);
 	
 	/**
 	 * Create and save new hotel reservation.

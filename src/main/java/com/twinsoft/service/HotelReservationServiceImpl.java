@@ -11,7 +11,9 @@ import javax.inject.Inject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -42,9 +44,13 @@ public class HotelReservationServiceImpl implements HotelReservationService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<HotelReservation> findAll() {
-		final HotelReservation[] reservations = (HotelReservation[]) this.restTemplate.getForObject(SERVER_URL+"/hotelreservations", HotelReservation[].class);
-		return Arrays.asList(reservations);
+	public ResponseEntity<HotelReservation[]> findAll(final String token) {
+		HttpHeaders headers = new HttpHeaders();
+		 
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		headers.set("Authorization", token);
+		final ResponseEntity<HotelReservation[]> reservations = this.restTemplate.exchange(SERVER_URL+"/hotelreservations", HttpMethod.GET, new HttpEntity<byte[]>(headers), HotelReservation[].class);
+		return reservations;
 	}
 
 	
@@ -52,7 +58,6 @@ public class HotelReservationServiceImpl implements HotelReservationService {
 	public HotelReservation save(final HotelReservation hotelReservation, final String token) {
 		HttpHeaders headers = new HttpHeaders();
 		 
-		//HttpAuthentication httpAuthentication = new HttpBasicAuthentication("username", "password");
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		headers.set("Authorization", token);
 		HttpEntity<HotelReservation> entity = new HttpEntity<HotelReservation>(hotelReservation, headers);
