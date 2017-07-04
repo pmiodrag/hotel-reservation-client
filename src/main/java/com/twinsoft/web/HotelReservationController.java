@@ -3,13 +3,16 @@
  */
 package com.twinsoft.web;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +36,7 @@ import com.twinsoft.service.HotelReservationService;
 import lombok.extern.slf4j.Slf4j;
 /**
  * Rest controller for exposing hotel reservation endpoints.
- * @author miodrag
+ * @author Miodrag
  */
 @Slf4j
 @RestController
@@ -67,11 +71,11 @@ public class HotelReservationController {
 	 */
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public void create(@Valid @RequestBody final HotelReservation hotelReservation, final UriComponentsBuilder builder) {		
-		try {
-			hotelReservationService.save(hotelReservation);
-		} catch (Exception e) {
-			log.error("Hotel reservation not created ", e);
+	public void create(@Valid @RequestBody final HotelReservation hotelReservation, final UriComponentsBuilder builder, @RequestHeader(value="Authorization") String token) {		
+		try {	
+			hotelReservationService.save(hotelReservation, token);
+		} catch (final Exception e) {
+			log.error("Hotel reservation not created hotel, Cause:",e);
 		}
 	}
 	
@@ -82,34 +86,29 @@ public class HotelReservationController {
 	 * @param hotelReservationId
 	 * @param hotelReservation
 	 * @return
-	 *//*
+	 */
 	@PutMapping(value="/{hotelReservationId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<HotelReservation> update(@PathVariable final Long hotelReservationId, @Valid @RequestBody final HotelReservation hotelReservation) {		
+	public void update(@PathVariable final Long hotelReservationId, @Valid @RequestBody final HotelReservation hotelReservation) {		
 		try {
 			hotelReservation.setId(hotelReservationId);
-			final HotelReservation updateHotelReservation  = hotelReservationService.save(hotelReservation);
-			return new ResponseEntity<>(updateHotelReservation, HttpStatus.OK);
-		} catch (IllegalArgumentException | TransactionRequiredException e) {
+			final HotelReservation updateHotelReservation  = hotelReservationService.update(hotelReservation);
+			//return new ResponseEntity<>(updateHotelReservation, HttpStatus.OK);
+		} catch (final Exception e) {
 			log.error("Exception occurred while updating hotel reservation with id {}. Cause: ", hotelReservationId, e);
-			throw new UpdateEntityException();
 		}
 	}
-	*//**
+	/**
 	 * Rest endpoint for deleting a hotel reservation with reservation id.
 	 *
 	 * @param hotelReservationId
-	 *//*
+	 */
 	@DeleteMapping(value = "/{hotelReservationId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable("hotelReservationId") final Long hotelReservationId) {
-		final HotelReservation hotelReservation = Optional
-				.ofNullable(hotelReservationService.findByHoteReservationlId(hotelReservationId))
-				.orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE));
 		try {
-			hotelReservationService.delete(hotelReservation.getId());
-		} catch (final DataIntegrityViolationException e) {
+			hotelReservationService.delete(hotelReservationId);
+		} catch (final Exception e) {
 			log.error("Exception occurred while deleting hotel reservation with reservation id {}. Cause: ", hotelReservationId, e);
-			throw new DeleteEntityException("deleteError");
 		}
-	}*/
+	}
 }

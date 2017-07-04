@@ -26,13 +26,20 @@ public interface HotelReservationService {
 	
 	/**
 	 * Create and save new hotel reservation.
+	 * @param token 
 	 * @return HotelReservation entity
 	 */
-	HotelReservation save(HotelReservation hotel);
+	HotelReservation save(HotelReservation hotel, String token);
 	
 	/**
 	 * Delete hotel reservation entity.
 	 * @param id to delete hotel reservation entity with requested id
 	 */
 	void delete(Long id);
+
+	/**
+	 * Update hotel reservation.
+	 * @return HotelReservation entity
+	 */
+	HotelReservation update(HotelReservation hotelReservation);
 }

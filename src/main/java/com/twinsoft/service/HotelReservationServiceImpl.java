@@ -9,13 +9,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.twinsoft.dto.HotelReservation;
-
-
 
 /**
  * Implementation of hotel reservation service.
@@ -39,17 +40,6 @@ public class HotelReservationServiceImpl implements HotelReservationService {
 		restTemplate.getMessageConverters().add(new ByteArrayHttpMessageConverter());
 	}	
 
-	/* (non-Javadoc)
-	 * @see com.twinsoft.service.HotelReservationService#findByHoteReservationlId(java.lang.Long)
-	 */
-/*	@Override
-	public HotelReservation findByHotelReservationId(Long id) {
-		return this.restTemplate.getForObject("/{id}/details", HotelReservation.class);
-	}*/
-
-	/* (non-Javadoc)
-	 * @see com.twinsoft.service.HotelReservationService#findAll()
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<HotelReservation> findAll() {
@@ -59,17 +49,25 @@ public class HotelReservationServiceImpl implements HotelReservationService {
 
 	
 	@Override
-	public HotelReservation save(final HotelReservation hotelReservation) {
-		return this.restTemplate.postForObject(SERVER_URL+"/hotelreservations", hotelReservation, HotelReservation.class);
+	public HotelReservation save(final HotelReservation hotelReservation, final String token) {
+		HttpHeaders headers = new HttpHeaders();
+		 
+		//HttpAuthentication httpAuthentication = new HttpBasicAuthentication("username", "password");
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		headers.set("Authorization", token);
+		HttpEntity<HotelReservation> entity = new HttpEntity<HotelReservation>(hotelReservation, headers);
+		return this.restTemplate.postForObject(SERVER_URL+"/hotelreservations", entity, HotelReservation.class);
 	}
 
-	
-	/* (non-Javadoc)
-	 * @see com.twinsoft.service.HotelReservationService#delete(java.lang.Long)
-	 */
 	@Override
 	public void delete(final Long id) {
-		//hotelReservationRepository.delete(id);		
+		this.restTemplate.delete(SERVER_URL+"/hotelreservations/"+id);	
+	}
+
+	@Override
+	public HotelReservation update(final HotelReservation hotelReservation) {
+		this.restTemplate.put(SERVER_URL+"/hotelreservations/"+hotelReservation.getId(), hotelReservation);
+		return hotelReservation;
 	}
 	
 

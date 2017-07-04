@@ -20,8 +20,10 @@ import lombok.NoArgsConstructor;
 public class HotelReservation implements Serializable {
 
 	private static final long serialVersionUID = 2117514065166400017L;
+	
+	private Long id;
 
-	private Long hotelId;
+	private Hotel hotel;
     
     /** Hotel room type. */
     private RoomType roomType;
