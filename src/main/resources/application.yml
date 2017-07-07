@@ -15,7 +15,8 @@ spring:
         
 hotelserver:
   url: http://localhost:9080/api
+hotelclient:
   amqp:
     exchange: twinsoft.hotelserver.exchange  
     queue: twinsoft.hotelserver.hotel.queue
-    routing-key: twinsoft.hotelserver.hotel.key  
+    routing-key: twinsoft.hotelserver.hotel.key
