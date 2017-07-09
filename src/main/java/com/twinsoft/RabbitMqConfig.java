@@ -3,14 +3,22 @@
  */
 package com.twinsoft;
 
+import java.text.SimpleDateFormat;
+
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 
 /**
@@ -21,6 +29,8 @@ import org.springframework.messaging.handler.annotation.support.DefaultMessageHa
 @Configuration
 public class RabbitMqConfig implements RabbitListenerConfigurer{
 
+	public static final String TIMESTAMP_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+	
 	@Value("${hotelclient.amqp.queue}")
 	private String hotelreservationQueue;
 
@@ -45,4 +55,17 @@ public class RabbitMqConfig implements RabbitListenerConfigurer{
 	public void configureRabbitListeners(final RabbitListenerEndpointRegistrar registrar) {
 	   registrar.setMessageHandlerMethodFactory(messageHandlerMethodFactory());
 	}
+	
+    @Bean(name = "eventMessageConverter")
+    public MessageConverter messageConverter() {
+        final Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter();
+        // Jackson deserialization point issue
+        final ObjectMapper jsonObjectMapper = new ObjectMapper();
+        //jsonObjectMapper.configure(DeserializationFeature.ACCEPT_FLOAT_AS_INT, false);
+        jsonObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        jsonObjectMapper.registerModule(new JavaTimeModule());
+        jsonObjectMapper.setDateFormat(new SimpleDateFormat(TIMESTAMP_FORMAT));
+        converter.setJsonObjectMapper(jsonObjectMapper);
+        return converter;
+    }
 }

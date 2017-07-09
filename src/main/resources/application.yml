@@ -18,5 +18,5 @@ hotelserver:
 hotelclient:
   amqp:
     exchange: twinsoft.hotelserver.exchange  
-    queue: twinsoft.hotelserver.hotel.queue
-    routing-key: twinsoft.hotelserver.hotel.key
+    queue: twinsoft.hotelserver.hotel.reservation.queue 
+    routing-key: twinsoft.hotelserver.hotel.reservation.key
