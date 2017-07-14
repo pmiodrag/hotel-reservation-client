@@ -7,6 +7,9 @@ import com.twinsoft.dto.HotelReservationEventMessage;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * @author Miodrag Pavkovic
+ */
 @Service
 @Slf4j
 public class HotelReservationListener {

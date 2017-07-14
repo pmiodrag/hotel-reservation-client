@@ -2,9 +2,8 @@ package com.twinsoft.dto;
 
 /**
  * The hotel rating represented as hotel stars from 1 to 5. 
- * 
- * @author miodrag
  *
+ * @author Miodrag Pavkovic
  */
 public enum HotelRating {
 	ONE_STAR(1),

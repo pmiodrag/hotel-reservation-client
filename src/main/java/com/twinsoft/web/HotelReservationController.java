@@ -3,21 +3,12 @@
  */
 package com.twinsoft.web;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,12 +27,13 @@ import com.twinsoft.service.HotelReservationService;
 import lombok.extern.slf4j.Slf4j;
 /**
  * Rest controller for exposing hotel reservation endpoints.
- * @author Miodrag
+ *
+ * @author Miodrag Pavkovic
  */
 @Slf4j
 @RestController
 @RequestMapping("hotelreservations")
-public class HotelReservationController {
+public class HotelReservationController { 
 	private static final String RESOURCE_NOT_FOUND_MESSAGE = null;
 	/** The hotel service */
 	private final HotelReservationService hotelReservationService;
@@ -92,7 +84,6 @@ public class HotelReservationController {
 		try {
 			hotelReservation.setId(hotelReservationId);
 			final HotelReservation updateHotelReservation  = hotelReservationService.update(hotelReservation);
-			//return new ResponseEntity<>(updateHotelReservation, HttpStatus.OK);
 		} catch (final Exception e) {
 			log.error("Exception occurred while updating hotel reservation with id {}. Cause: ", hotelReservationId, e);
 		}

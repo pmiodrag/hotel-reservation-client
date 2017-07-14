@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.twinsoft;
 
 import java.text.SimpleDateFormat;
@@ -61,7 +58,6 @@ public class RabbitMqConfig implements RabbitListenerConfigurer{
         final Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter();
         // Jackson deserialization point issue
         final ObjectMapper jsonObjectMapper = new ObjectMapper();
-        //jsonObjectMapper.configure(DeserializationFeature.ACCEPT_FLOAT_AS_INT, false);
         jsonObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         jsonObjectMapper.registerModule(new JavaTimeModule());
         jsonObjectMapper.setDateFormat(new SimpleDateFormat(TIMESTAMP_FORMAT));

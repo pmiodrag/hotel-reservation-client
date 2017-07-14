@@ -2,6 +2,7 @@ package com.twinsoft.dto;
 
 /**
  * Represent room type.
+ * 
  * @author Miodrag Pavkovic
  */
 public enum RoomType {

@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 
 
 /**
+ * HotelRoomType entity.
+ * 
  * @author Miodrag Pavkovic
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
